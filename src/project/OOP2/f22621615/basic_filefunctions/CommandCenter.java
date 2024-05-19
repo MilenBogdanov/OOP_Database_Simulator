@@ -101,11 +101,11 @@ public class CommandCenter {
                 if (fileCommand instanceof OpenFileCommand) {
                     OpenFileCommand openCommand = (OpenFileCommand) fileCommand;
                     openCommand.setFileName(parameter);
-                    openCommand.execute();
+                    //openCommand.execute();
                 } else if (fileCommand instanceof SaveFileAsCommand) {
                     SaveFileAsCommand saveAsCommand = (SaveFileAsCommand) fileCommand;
                     saveAsCommand.setFileName(parameter);
-                    saveAsCommand.execute();
+                    //saveAsCommand.execute();
                 } else {
                     if (!openFileCommand.isFileOpened()) {
                         System.out.println("No file is currently open. Use 'open' to open a file.");

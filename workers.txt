@@ -8,7 +8,7 @@ column: positions STRING
 Rows:
 1 John Doe 50000.00 null
 1 John Doe 70000.00 null
-2 Jane Smith 60000.00 null
+2 Jane Smith 69000.0 null
 3 Michael Johnson 100000.00 null
 4 Emily Davis 55000.00 null
 5 Robert Wilson 62000.00 null
@@ -21,4 +21,3 @@ Rows:
 12 Amy White 71000.00 null
 13 Milen Bogdanov 85000.0 null
 14 Nurdzhan Mehmedova 79000.00 null
-15 Nurdzhan Mehmedova 79000.00 null
