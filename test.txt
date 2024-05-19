@@ -1,0 +1,22 @@
+TableName: test
+Columns:
+column: id INTEGER
+column: first_name STRING
+column: last_name STRING
+column: salary FLOAT
+column: positions NULL
+column: city STRING
+column: idk STRING
+Rows:
+1 John Doe 50000.00 null null null
+2 Jane Smith 60000.00 null null null
+3 Michael Johnson 100000.00 null null null
+4 Emily Davis 55000.00 null null null
+5 Robert Wilson 62000.00 null null null
+6 Susan Brown 58000.00 null null null
+7 David Martinez 72000.00 null null null
+8 Lisa Taylor 67000.00 null null null
+9 Steven Anderson 63000.00 null null null
+10 Karen Hernandez 59000.00 null null null
+11 Matthew Thomas 64000.00 null null null
+12 Amy White 71000.00 null null null
