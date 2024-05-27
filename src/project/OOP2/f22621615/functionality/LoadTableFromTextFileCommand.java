@@ -10,8 +10,8 @@ import project.OOP2.f22621615.interfaces.Command;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Command to load a table from a text file.
  */
@@ -20,21 +20,31 @@ public class LoadTableFromTextFileCommand implements Command {
     private String fileName;
 
     /**
-     * Constructs a LoadTableFromTextFileCommand with the specified database and file name.
+     * Constructs a LoadTableFromTextFileCommand with the specified database.
      *
      * @param database The database to load the table into.
-     * @param fileName The name of the text file containing the table data.
      */
-    public LoadTableFromTextFileCommand(Database database, String fileName) {
+    public LoadTableFromTextFileCommand(Database database) {
         this.database = database;
+    }
+
+    /**
+     * Sets the file name of the text file containing the table data.
+     *
+     * @param fileName The name of the text file.
+     */
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
     /**
      * Executes the command to load a table from the text file.
+     *
+     * @param parameter The parameter associated with the command.
      */
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        this.fileName = parameter; // Set the file name from the parameter
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             String tableName = null;
@@ -85,14 +95,5 @@ public class LoadTableFromTextFileCommand implements Command {
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
-
-    /**
-     * Sets the file name of the text file containing the table data.
-     *
-     * @param fileName The name of the text file.
-     */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 }

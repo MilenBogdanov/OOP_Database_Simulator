@@ -6,6 +6,7 @@ import project.OOP2.f22621615.database.Table;
 import project.OOP2.f22621615.interfaces.Command;
 
 import java.util.List;
+
 /**
  * Command to select rows from a table based on a specific column value.
  */
@@ -16,36 +17,51 @@ public class SelectCommand implements Command {
     private String tableName;
 
     /**
-     * Constructs a SelectCommand with the specified database, column name, value, and table name.
+     * Constructs a SelectCommand with the specified database.
      *
-     * @param database   The database containing the table.
-     * @param columnName The name of the column to search for the value.
-     * @param value      The value to search for in the column.
-     * @param tableName  The name of the table to select rows from.
+     * @param database The database containing the table.
      */
-    public SelectCommand(Database database, String columnName, String value, String tableName) {
+    public SelectCommand(Database database) {
         this.database = database;
-        this.columnName = columnName;
-        this.value = value;
-        this.tableName = tableName;
     }
 
     /**
      * Executes the command to select rows from the table based on the specified column value.
+     *
+     * @param parameter The parameter associated with the command.
      */
     @Override
-    public void execute() {
-        Table table = database.getTableByName(tableName);
-        if (table != null) {
-            List<Row> rows = table.getRows();
-            System.out.println("Rows from table " + tableName + " where column " + columnName + " has value '" + value + "':");
-            for (Row row : rows) {
-                if (rowContainsValue(row, columnName, value)) {
-                    System.out.println(row);
-                }
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 3) {
+            String columnName = params[0];
+            String value = params[1];
+            String tableName = params[2];
+            Table table = database.getTableByName(tableName);
+            if (table != null) {
+                selectRows(table, columnName, value);
+            } else {
+                System.out.println("Table '" + tableName + "' not found.");
             }
         } else {
-            System.out.println("Table '" + tableName + "' not found.");
+            System.out.println("Invalid parameters. Usage: select <column_name> <value> <table_name>");
+        }
+    }
+
+    /**
+     * Selects rows from the table based on the specified column value.
+     *
+     * @param table      The table to select rows from.
+     * @param columnName The name of the column.
+     * @param value      The value to search for in the column.
+     */
+    private void selectRows(Table table, String columnName, String value) {
+        List<Row> rows = table.getRows();
+        System.out.println("Rows from table " + table.getName() + " where column " + columnName + " has value '" + value + "':");
+        for (Row row : rows) {
+            if (rowContainsValue(row, columnName, value)) {
+                System.out.println(row);
+            }
         }
     }
 
@@ -60,32 +76,5 @@ public class SelectCommand implements Command {
     private boolean rowContainsValue(Row row, String columnName, String value) {
         Object columnValue = row.getValue(columnName);
         return columnValue != null && columnValue.equals(value);
-    }
-
-    /**
-     * Sets the name of the column.
-     *
-     * @param columnName The name of the column.
-     */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-
-    /**
-     * Sets the value to search for in the column.
-     *
-     * @param value The value to search for.
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * Sets the name of the table.
-     *
-     * @param tableName The name of the table.
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 }

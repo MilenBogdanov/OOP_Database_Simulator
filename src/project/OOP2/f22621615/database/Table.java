@@ -121,26 +121,26 @@ public class Table {
     }
 
     /**
-     * Updates a row in the table with new data.
-     *
-     * @param updatedRow the updated row
-     */
-    public void updateRow(Row updatedRow) {
-        for (int i = 0; i < rows.size(); i++) {
-            Row row = rows.get(i);
-            if (row.equals(updatedRow)) {
-                rows.set(i, updatedRow);
-                return;
-            }
-        }
-    }
-
-    /**
      * Sets the name of the table.
      *
      * @param name the new name of the table
      */
     public void setName(String name) {
         this.name = name;
+    }
+    /**
+     * Returns a string containing the names of all columns in the table, separated by commas.
+     *
+     * @return a string containing column names separated by commas
+     */
+    public String getColumnNamesAsString() {
+        StringBuilder columnNamesString = new StringBuilder();
+        for (int i = 0; i < columns.size(); i++) {
+            if (i > 0) {
+                columnNamesString.append(", ");
+            }
+            columnNamesString.append(columns.get(i).getName());
+        }
+        return columnNamesString.toString();
     }
 }

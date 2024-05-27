@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
+
 /**
  * Command to delete rows from a table based on a specified column value.
  */
@@ -20,17 +21,38 @@ public class DeleteCommand implements Command {
     private Object searchColumnValue;
 
     /**
-     * Constructs a DeleteCommand with the specified database, table name, search column name, and search column value.
+     * Constructs a DeleteCommand with the specified database.
      *
-     * @param database           The database containing the table from which rows will be deleted.
-     * @param tableName          The name of the table.
-     * @param searchColumnName   The name of the column to search for the value.
-     * @param searchColumnValue  The value to search for in the specified column.
+     * @param database The database containing the table from which rows will be deleted.
      */
-    public DeleteCommand(Database database, String tableName, String searchColumnName, Object searchColumnValue) {
+    public DeleteCommand(Database database) {
         this.database = database;
+    }
+
+    /**
+     * Sets the name of the table.
+     *
+     * @param tableName The name of the table.
+     */
+    public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    /**
+     * Sets the name of the column to search in.
+     *
+     * @param searchColumnName The name of the column to search in.
+     */
+    public void setSearchColumnName(String searchColumnName) {
         this.searchColumnName = searchColumnName;
+    }
+
+    /**
+     * Sets the value to search for in the specified column.
+     *
+     * @param searchColumnValue The value to search for.
+     */
+    public void setSearchColumnValue(Object searchColumnValue) {
         this.searchColumnValue = searchColumnValue;
     }
 
@@ -38,7 +60,19 @@ public class DeleteCommand implements Command {
      * Executes the command to delete rows from the table.
      */
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 3) {
+            setTableName(params[0]);
+            setSearchColumnName(params[1]);
+            setSearchColumnValue(params[2]);
+            performDelete();
+        } else {
+            System.out.println("Invalid parameters. Usage: delete <tableName> <searchColumnName> <searchColumnValue>");
+        }
+    }
+
+    private void performDelete() {
         Table table = database.getTableByName(tableName);
         if (table != null) {
             Iterator<Row> iterator = table.getRows().iterator();
@@ -64,11 +98,6 @@ public class DeleteCommand implements Command {
         }
     }
 
-    /**
-     * Updates the associated text file with the modified table structure.
-     *
-     * @param table The table from which rows were deleted.
-     */
     private void updateFile(Table table) {
         String fileName = table.getAssociatedTextFile();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
@@ -90,29 +119,5 @@ public class DeleteCommand implements Command {
         } catch (IOException e) {
             System.out.println("Error updating file: " + e.getMessage());
         }
-    }
-    /**
-     * Sets the name of the table.
-     *
-     * @param tableName The name of the table.
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-    /**
-     * Sets the name of the column to search in.
-     *
-     * @param searchColumnName The name of the column to search in.
-     */
-    public void setSearchColumnName(String searchColumnName) {
-        this.searchColumnName = searchColumnName;
-    }
-    /**
-     * Sets the value to search for in the specified column.
-     *
-     * @param searchColumnValue The value to search for.
-     */
-    public void setSearchColumnValue(Object searchColumnValue) {
-        this.searchColumnValue = searchColumnValue;
     }
 }

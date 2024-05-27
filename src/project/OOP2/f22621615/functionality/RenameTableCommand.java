@@ -13,23 +13,42 @@ public class RenameTableCommand implements Command {
     private String newName;
 
     /**
-     * Constructs a RenameTableCommand with the specified database, old table name, and new table name.
+     * Constructs a RenameTableCommand with the specified database.
      *
      * @param database The database containing the table.
-     * @param oldName  The old name of the table.
-     * @param newName  The new name of the table.
      */
-    public RenameTableCommand(Database database, String oldName, String newName) {
+    public RenameTableCommand(Database database) {
         this.database = database;
-        this.oldName = oldName;
-        this.newName = newName;
     }
 
     /**
      * Executes the command to rename the table.
+     *
+     * @param parameter The parameter associated with the command.
      */
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 2) {
+            String oldTableName = params[0];
+            String newTableName = params[1];
+            if (database.tableExists(oldTableName)) {
+                this.oldName = oldTableName;
+                this.newName = newTableName;
+                renameTable();
+            } else {
+                System.out.println("Table '" + oldTableName + "' not found.");
+            }
+        } else {
+            System.out.println("Invalid parameters. Usage: rename <oldTableName> <newTableName>");
+            return;
+        }
+    }
+
+    /**
+     * Renames the table.
+     */
+    private void renameTable() {
         Table table = database.getTableByName(oldName);
         if (table != null) {
             table.setName(newName);
@@ -38,7 +57,7 @@ public class RenameTableCommand implements Command {
 
             System.out.println("Table renamed successfully from '" + oldName + "' to '" + newName + "'.");
         } else {
-            System.out.println("Table '" + oldName + "' no more in the database.");
+            System.out.println("Table '" + oldName + "' not found in the database.");
         }
     }
 
@@ -69,23 +88,5 @@ public class RenameTableCommand implements Command {
         } catch (IOException e) {
             System.out.println("Error updating table name in the associated text file: " + e.getMessage());
         }
-    }
-
-    /**
-     * Sets the old name of the table.
-     *
-     * @param oldName The old name of the table.
-     */
-    public void setOldName(String oldName) {
-        this.oldName = oldName;
-    }
-
-    /**
-     * Sets the new name of the table.
-     *
-     * @param newName The new name of the table.
-     */
-    public void setNewName(String newName) {
-        this.newName = newName;
     }
 }

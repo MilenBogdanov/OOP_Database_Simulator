@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
  * The {@code SaveFileAsCommand} class represents a command to save the file with a new name.
  * It implements the {@link Command} and {@link FileCommand} interfaces and defines behavior
@@ -15,17 +16,16 @@ import java.io.IOException;
 public class SaveFileAsCommand implements Command, FileCommand {
     private String newFileName;
     private StringBuilder fileContent;
-    private OpenFileCommand openFileCommand;
+
     /**
-     * Constructs a new {@code SaveFileAsCommand} with the specified file content and an instance of {@code OpenFileCommand}.
+     * Constructs a new {@code SaveFileAsCommand} with the specified file content.
      *
-     * @param fileContent     the content of the file to be saved
-     * @param openFileCommand the {@code OpenFileCommand} instance used for opening the file
+     * @param fileContent the content of the file to be saved
      */
-    public SaveFileAsCommand(StringBuilder fileContent, OpenFileCommand openFileCommand) {
+    public SaveFileAsCommand(StringBuilder fileContent) {
         this.fileContent = fileContent;
-        this.openFileCommand = openFileCommand;
     }
+
     /**
      * Sets the file name for saving.
      *
@@ -35,6 +35,7 @@ public class SaveFileAsCommand implements Command, FileCommand {
     public void setFileName(String fileName) {
         this.newFileName = fileName;
     }
+
     /**
      * Retrieves the file name set for saving.
      *
@@ -44,18 +45,20 @@ public class SaveFileAsCommand implements Command, FileCommand {
     public String getFileName() {
         return this.newFileName;
     }
+
     /**
      * Executes the save file as command.
      * Saves the file with the new file name.
      */
     @Override
-    public void execute() {
-        if (newFileName != null && !newFileName.isEmpty()) {
-            saveToFile(newFileName, fileContent);
+    public void execute(String fileName) {
+        if (fileName != null && !fileName.isEmpty()) {
+            saveToFile(fileName, fileContent);
         } else {
             System.out.println("Please specify a file name to save.");
         }
     }
+
     /**
      * Saves the content to a file with the specified name.
      *

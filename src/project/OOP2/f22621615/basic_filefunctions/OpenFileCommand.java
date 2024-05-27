@@ -27,23 +27,26 @@ public class OpenFileCommand implements Command, FileCommand {
         this.fileContent = fileContent;
         this.fileOpened = false;
     }
+
     /**
      * Executes the open file command.
      * Reads the content of the specified file and appends it to the file content buffer.
      * If the file does not exist, creates a new empty file.
      */
     @Override
-    public void execute() {
-        if (fileName == null || fileName.isEmpty()) {
+    public void execute(String fileName) {
+        this.fileName = fileName;
+        if (this.fileName == null || this.fileName.isEmpty()) {
             System.out.println("Please specify a file to open.");
             return;
         }
-        if (fileOpened){
-            System.out.println("There is already opened file");
+        if (fileOpened) {
+            System.out.println("There is already an opened file.");
+            return;
         }
 
         try {
-            File file = new File(fileName);
+            File file = new File(this.fileName);
             if (!file.exists()) {
                 file.createNewFile();
                 System.out.println("File not found. Created a new empty file.");
@@ -55,7 +58,7 @@ public class OpenFileCommand implements Command, FileCommand {
                     fileContent.append(line).append("\n");
                 }
                 if (!fileOpened) {
-                    System.out.println("Opening file... ");
+                    System.out.println("Opening file...");
                     System.out.println("Successfully opened " + file.getName());
                     fileOpened = true;
                 }
@@ -64,14 +67,17 @@ public class OpenFileCommand implements Command, FileCommand {
             System.out.println("Error opening/creating the file: " + e.getMessage());
         }
     }
+
     /**
      * Sets the file name to be opened.
      *
      * @param fileName the name of the file to be opened
      */
+    @Override
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     /**
      * Retrieves the file name currently set for opening.
      *
@@ -80,13 +86,5 @@ public class OpenFileCommand implements Command, FileCommand {
     @Override
     public String getFileName() {
         return fileName;
-    }
-    /**
-     * Checks if a file has been successfully opened.
-     *
-     * @return {@code true} if a file has been opened, {@code false} otherwise
-     */
-    public boolean isFileOpened() {
-        return fileOpened;
     }
 }

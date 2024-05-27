@@ -81,11 +81,19 @@ public class Database {
     }
 
     /**
-     * Checks if the database is empty.
+     * Retrieves the data in the database as a string.
      *
-     * @return {@code true} if the database is empty, {@code false} otherwise
+     * @return the data in the database as a string
      */
-    public boolean isEmpty() {
-        return tables.isEmpty();
+    public String getDataAsString() {
+        StringBuilder result = new StringBuilder();
+        for (Table table : tables) {
+            result.append("Table: ").append(table.getName()).append("\n");
+            result.append(table.getColumnNamesAsString()).append("\n");
+            for (Row row : table.getRows()) {
+                result.append(row.toString()).append("\n");
+            }
+        }
+        return result.toString();
     }
 }

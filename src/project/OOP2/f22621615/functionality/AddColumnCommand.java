@@ -9,6 +9,7 @@ import project.OOP2.f22621615.interfaces.Command;
 
 import java.io.FileWriter;
 import java.io.IOException;
+
 /**
  * Command to add a new column to a table in the database.
  */
@@ -19,27 +20,25 @@ public class AddColumnCommand implements Command {
     private DataType columnType;
     private String fileName;
 
-    /**
-     * Constructs an AddColumnCommand.
-     *
-     * @param database   The database where the table exists.
-     * @param tableName  The name of the table to add the column to.
-     * @param columnName The name of the new column.
-     * @param columnType The data type of the new column.
-     * @param fileName   The name of the file to update after adding the column.
-     */
-    public AddColumnCommand(Database database, String tableName, String columnName, DataType columnType, String fileName) {
+    public AddColumnCommand(Database database) {
         this.database = database;
-        this.tableName = tableName;
-        this.columnName = columnName;
-        this.columnType = columnType;
-        this.fileName = fileName;
     }
-    /**
-     * Executes the command to add a new column to the table.
-     */
+
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 3) {
+            this.tableName = params[0];
+            this.columnName = params[1];
+            this.columnType = DataType.valueOf(params[2].toUpperCase());
+            this.fileName = tableName + ".txt";
+            addColumn();
+        } else {
+            System.out.println("Invalid parameters. Usage: addcolumn <tableName> <columnName> <columnType>");
+        }
+    }
+
+    private void addColumn() {
         Table table = database.getTableByName(tableName);
         if (table != null) {
             boolean columnExists = table.getColumns().stream().anyMatch(c -> c.getName().equals(columnName));
@@ -61,11 +60,7 @@ public class AddColumnCommand implements Command {
             System.out.println("Table '" + tableName + "' not found.");
         }
     }
-    /**
-     * Updates the text file with the new table structure.
-     *
-     * @param table The table whose structure is updated.
-     */
+
     private void updateTextFile(Table table) {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("TableName: " + table.getName() + "\n");
@@ -87,35 +82,11 @@ public class AddColumnCommand implements Command {
             System.out.println("Error updating text file: " + e.getMessage());
         }
     }
-    /**
-     * Sets the name of the table.
-     *
-     * @param tableName The name of the table.
-     */
+
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
-    /**
-     * Sets the name of the column.
-     *
-     * @param columnName The name of the column.
-     */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-    /**
-     * Sets the data type of the column.
-     *
-     * @param columnType The data type of the column.
-     */
-    public void setColumnType(DataType columnType) {
-        this.columnType = columnType;
-    }
-    /**
-     * Sets the name of the file.
-     *
-     * @param fileName The name of the file.
-     */
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

@@ -5,91 +5,10 @@ import project.OOP2.f22621615.database.Row;
 import project.OOP2.f22621615.database.Table;
 import project.OOP2.f22621615.interfaces.Command;
 
-/*import java.util.HashMap;
-import java.util.Map;
-
-public class PrintTableRowsCommand implements Command {
-    private Database database;
-    private String tableName;
-
-    public PrintTableRowsCommand(Database database) {
-        this.database = database;
-    }
-
-    @Override
-    public void execute() {
-        Table table = database.getTableByName(tableName);
-        if (table != null) {
-            System.out.println("Rows from table " + tableName + ":");
-            printTable(table);
-        } else {
-            System.out.println("Table '" + tableName + "' not found.");
-        }
-    }
-
-    private void printTable(Table table) {
-        Map<String, Integer> columnWidths = calculateColumnWidths(table);
-        printSeparator(columnWidths);
-        printHeader(table, columnWidths);
-        printSeparator(columnWidths);
-        for (Row row : table.getRows()) {
-            printRow(row, columnWidths);
-        }
-        printSeparator(columnWidths);
-    }
-
-    private Map<String, Integer> calculateColumnWidths(Table table) {
-        Map<String, Integer> columnWidths = new HashMap<>();
-        for (String columnName : table.getColumnNames()) {
-            columnWidths.put(columnName, Math.max(columnName.length(), getMaxColumnWidth(table, columnName)));
-        }
-        return columnWidths;
-    }
-
-    private int getMaxColumnWidth(Table table, String columnName) {
-        int maxWidth = columnName.length();
-        for (Row row : table.getRows()) {
-            Object value = row.getValue(columnName);
-            if (value != null) {
-                maxWidth = Math.max(maxWidth, value.toString().length());
-            }
-        }
-        return maxWidth;
-    }
-
-    private void printSeparator(Map<String, Integer> columnWidths) {
-        for (String columnName : columnWidths.keySet()) {
-            System.out.print("+");
-            for (int i = 0; i < columnWidths.get(columnName) + 2; i++) {
-                System.out.print("-");
-            }
-        }
-        System.out.println("+");
-    }
-
-    private void printHeader(Table table, Map<String, Integer> columnWidths) {
-        for (String columnName : table.getColumnNames()) {
-            System.out.printf("| %-" + columnWidths.get(columnName) + "s ", columnName);
-        }
-        System.out.println("|");
-    }
-
-    private void printRow(Row row, Map<String, Integer> columnWidths) {
-        for (String columnName : row.getColumnNames()) {
-            Object value = row.getValue(columnName);
-            String valueString = (value != null) ? value.toString() : "null";
-            System.out.printf("| %-" + columnWidths.get(columnName) + "s ", valueString);
-        }
-        System.out.println("|");
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-}*/
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+
 /**
  * Command to print rows of a table with pagination.
  */
@@ -109,9 +28,18 @@ public class PrintTableRowsCommand implements Command {
 
     /**
      * Executes the command to print rows of the specified table.
+     *
+     * @param parameter The parameter associated with the command.
      */
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        if (parameter != null && !parameter.isEmpty()) {
+            this.tableName = parameter;
+        } else {
+            System.out.println("Invalid parameters. Usage: print <tableName>");
+            return;
+        }
+
         Table table = database.getTableByName(tableName);
         if (table != null) {
             System.out.println("Rows from table " + tableName + ":");

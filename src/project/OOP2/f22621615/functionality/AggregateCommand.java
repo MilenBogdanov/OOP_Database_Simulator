@@ -9,6 +9,7 @@ import project.OOP2.f22621615.interfaces.Command;
 
 import java.util.List;
 import java.text.DecimalFormat;
+
 /**
  * Command to perform aggregate operations on numeric columns of a table.
  */
@@ -19,6 +20,7 @@ public class AggregateCommand implements Command {
     private Object searchValue;
     private String targetColumnName;
     private String operation;
+
     /**
      * Constructs an AggregateCommand with the specified database.
      *
@@ -27,6 +29,7 @@ public class AggregateCommand implements Command {
     public AggregateCommand(Database database) {
         this.database = database;
     }
+
     /**
      * Sets the name of the table.
      *
@@ -35,6 +38,7 @@ public class AggregateCommand implements Command {
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
+
     /**
      * Sets the name of the column to search in.
      *
@@ -43,6 +47,7 @@ public class AggregateCommand implements Command {
     public void setSearchColumnName(String searchColumnName) {
         this.searchColumnName = searchColumnName;
     }
+
     /**
      * Sets the value to search for in the specified column.
      *
@@ -51,6 +56,7 @@ public class AggregateCommand implements Command {
     public void setSearchValue(Object searchValue) {
         this.searchValue = searchValue;
     }
+
     /**
      * Sets the name of the target column to perform the aggregate operation on.
      *
@@ -59,6 +65,7 @@ public class AggregateCommand implements Command {
     public void setTargetColumnName(String targetColumnName) {
         this.targetColumnName = targetColumnName;
     }
+
     /**
      * Sets the type of aggregate operation to perform.
      *
@@ -67,12 +74,27 @@ public class AggregateCommand implements Command {
     public void setOperation(String operation) {
         this.operation = operation;
     }
+
     /**
      * Executes the command to perform the aggregate operation.
-     * Options: min, max, product, sum.
+     * Options: sum, product, maximum, minimum.
      */
     @Override
-    public void execute() {
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 5) {
+            setTableName(params[0]);
+            setSearchColumnName(params[1]);
+            setSearchValue(params[2]);
+            setTargetColumnName(params[3]);
+            setOperation(params[4]);
+            performAggregate();
+        } else {
+            System.out.println("Invalid parameters. Usage: aggregate <tableName> <searchColumnName> <searchValue> <targetColumnName> <operation>");
+        }
+    }
+
+    private void performAggregate() {
         Table table = database.getTableByName(tableName);
         if (table == null) {
             System.out.println("Table '" + tableName + "' not found.");
@@ -88,11 +110,12 @@ public class AggregateCommand implements Command {
 
         double result = 0;
         double productResult = 1;
+        boolean first = true;
 
         List<Row> rows = table.getRows();
         for (Row row : rows) {
             Object searchColumnValue = row.getValue(searchColumnName);
-            if (searchColumnValue.equals(searchValue)) {
+            if (searchColumnValue.toString().equals(searchValue.toString())) {
                 Object targetColumnValue = row.getValue(targetColumnName);
                 double numericValue = Double.parseDouble(targetColumnValue.toString());
                 switch (operation) {
@@ -103,10 +126,20 @@ public class AggregateCommand implements Command {
                         productResult *= numericValue;
                         break;
                     case "maximum":
-                        result = Math.max(result, numericValue);
+                        if (first) {
+                            result = numericValue;
+                            first = false;
+                        } else {
+                            result = Math.max(result, numericValue);
+                        }
                         break;
                     case "minimum":
-                        result = (result == 0) ? numericValue : Math.min(result, numericValue);
+                        if (first) {
+                            result = numericValue;
+                            first = false;
+                        } else {
+                            result = Math.min(result, numericValue);
+                        }
                         break;
                     default:
                         System.out.println("Unsupported operation: " + operation);
@@ -118,17 +151,12 @@ public class AggregateCommand implements Command {
         if (operation.equals("product")) {
             DecimalFormat df = new DecimalFormat("#,###");
             String formattedResult = df.format(productResult);
-            System.out.println("Aggregate result: " + formattedResult + " BGN");
+            System.out.println("Aggregate result: " + formattedResult);
         } else {
-            System.out.println("Aggregate result: " + result + " BGN");
+            System.out.println("Aggregate result: " + result);
         }
     }
-    /**
-     * Checks if the given data type is numeric.
-     *
-     * @param dataType The data type to check.
-     * @return True if the data type is numeric, false otherwise.
-     */
+
     private boolean isNumericType(DataType dataType) {
         return dataType == DataType.INTEGER || dataType == DataType.FLOAT;
     }

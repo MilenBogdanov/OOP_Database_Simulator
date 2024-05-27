@@ -4,6 +4,7 @@ import project.OOP2.f22621615.database.Column;
 import project.OOP2.f22621615.database.Database;
 import project.OOP2.f22621615.database.Row;
 import project.OOP2.f22621615.database.Table;
+import project.OOP2.f22621615.enums.DataType;
 import project.OOP2.f22621615.interfaces.Command;
 
 import java.io.BufferedWriter;
@@ -11,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Command to update rows in a table based on certain criteria.
  */
@@ -24,62 +26,73 @@ public class UpdateCommand implements Command {
     private String fileName;
 
     /**
-     * Constructs an UpdateCommand with the specified parameters.
+     * Constructs an UpdateCommand with the specified database.
      *
-     * @param database           The database containing the table to be updated.
-     * @param tableName          The name of the table to be updated.
-     * @param searchColumnName   The name of the column to search for.
-     * @param searchColumnValue  The value to search for in the search column.
-     * @param targetColumnName   The name of the column to update.
-     * @param targetColumnValue  The value to set in the target column for matching rows.
+     * @param database The database containing the table to be updated.
      */
-    public UpdateCommand(Database database, String tableName, String searchColumnName, Object searchColumnValue, String targetColumnName, Object targetColumnValue) {
+    public UpdateCommand(Database database) {
         this.database = database;
-        this.tableName = tableName;
-        this.searchColumnName = searchColumnName;
-        this.searchColumnValue = searchColumnValue;
-        this.targetColumnName = targetColumnName;
-        this.targetColumnValue = targetColumnValue;
-    }
-
-    /**
-     * Sets the file name for saving the updated table.
-     *
-     * @param fileName The file name to save the updated table.
-     */
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     /**
      * Executes the command to update rows in the table.
+     *
+     * @param parameter The parameter associated with the command.
      */
     @Override
-    public void execute() {
-        Table table = database.getTableByName(tableName);
-        if (table != null) {
-            boolean updated = false;
-            List<Row> updatedRows = new ArrayList<>();
-            for (Row row : table.getRows()) {
-                Object value = row.getValue(searchColumnName);
-                if (value != null && value.equals(searchColumnValue)) {
-                    row.setValue(targetColumnName, targetColumnValue);
-                    updatedRows.add(row);
-                    updated = true;
-                }
-            }
-            if (updated) {
-                for (Row updatedRow : updatedRows) {
-                    table.updateRow(updatedRow);
-                }
-                saveTableToFile(table, fileName);
-                System.out.println("Rows updated successfully and saved to file: " + fileName);
+    public void execute(String parameter) {
+        String[] params = parameter.split("\\s+");
+        if (params.length == 5) {
+            tableName = params[0];
+            searchColumnName = params[1];
+            searchColumnValue = parseColumnValue(params[2], database.getTableByName(tableName).getColumn(searchColumnName).getType());
+            targetColumnName = params[3];
+            targetColumnValue = parseColumnValue(params[4], database.getTableByName(tableName).getColumn(targetColumnName).getType());
+
+            Table table = database.getTableByName(tableName);
+            if (table != null) {
+                updateRows(table);
             } else {
-                System.out.println("No rows found matching the search criteria.");
+                System.out.println("Table '" + tableName + "' not found.");
             }
         } else {
-            System.out.println("Table '" + tableName + "' not found.");
+            System.out.println("Invalid parameters. Usage: update <tableName> <searchColumnName> <searchColumnValue> <targetColumnName> <targetColumnValue>");
         }
+    }
+
+    /**
+     * Parses the string value into its corresponding data type.
+     *
+     * @param value    The string value to parse.
+     * @param dataType The data type to parse the value into.
+     * @return The parsed object with the appropriate data type, or null if the data type is NULL.
+     */
+    private Object parseColumnValue(String value, DataType dataType) {
+        return switch (dataType) {
+            case INTEGER -> Integer.parseInt(value);
+            case FLOAT -> Float.parseFloat(value);
+            case STRING -> value;
+            case NULL -> null;
+            default -> throw new IllegalArgumentException("Unsupported data type: " + dataType);
+        };
+    }
+
+    /**
+     * Updates rows in the table based on the specified criteria.
+     *
+     * @param table The table to be updated.
+     */
+    private void updateRows(Table table) {
+        List<Row> updatedRows = new ArrayList<>();
+        for (Row row : table.getRows()) {
+            Object value = row.getValue(searchColumnName);
+            if (value != null && value.equals(searchColumnValue)) {
+                row.setValue(targetColumnName, targetColumnValue);
+                updatedRows.add(row);
+            }
+        }
+        saveTableToFile(table, fileName);
+        System.out.println("Rows updated successfully and saved to file: " + fileName);
     }
 
     /**
@@ -110,43 +123,11 @@ public class UpdateCommand implements Command {
     }
 
     /**
-     * Sets the name of the table to be updated.
+     * Sets the file name for saving the updated table.
      *
-     * @param tableName The name of the table.
+     * @param fileName The file name to save the updated table.
      */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-    /**
-     * Sets the name of the column to search for.
-     *
-     * @param searchColumnName The name of the search column.
-     */
-    public void setSearchColumnName(String searchColumnName) {
-        this.searchColumnName = searchColumnName;
-    }
-    /**
-     * Sets the value to search for in the search column.
-     *
-     * @param searchColumnValue The value to search for.
-     */
-    public void setSearchColumnValue(Object searchColumnValue) {
-        this.searchColumnValue = searchColumnValue;
-    }
-    /**
-     * Sets the name of the column to be updated.
-     *
-     * @param targetColumnName The name of the target column.
-     */
-    public void setTargetColumnName(String targetColumnName) {
-        this.targetColumnName = targetColumnName;
-    }
-    /**
-     * Sets the value to be set in the target column for matching rows.
-     *
-     * @param targetColumnValue The value to set in the target column.
-     */
-    public void setTargetColumnValue(Object targetColumnValue) {
-        this.targetColumnValue = targetColumnValue;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
