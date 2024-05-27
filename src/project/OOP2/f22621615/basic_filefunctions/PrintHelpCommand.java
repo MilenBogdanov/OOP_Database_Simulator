@@ -10,7 +10,6 @@ public class PrintHelpCommand implements Command {
     /**
      * Executes the print help command.
      * Prints information about the supported commands and their descriptions.
-     * If a parameter is provided, it ignores it.
      *
      * @param parameter The parameter for the print help command (not used).
      */

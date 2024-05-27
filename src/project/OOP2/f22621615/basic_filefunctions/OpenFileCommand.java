@@ -87,4 +87,5 @@ public class OpenFileCommand implements Command, FileCommand {
     public String getFileName() {
         return fileName;
     }
+
 }

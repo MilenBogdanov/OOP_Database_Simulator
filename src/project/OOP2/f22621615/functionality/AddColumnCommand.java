@@ -20,10 +20,20 @@ public class AddColumnCommand implements Command {
     private DataType columnType;
     private String fileName;
 
+    /**
+     * Constructs an AddColumnCommand with the specified database.
+     *
+     * @param database The database containing the table to add a column to.
+     */
     public AddColumnCommand(Database database) {
         this.database = database;
     }
 
+    /**
+     * Executes the command to add a new column to a table.
+     *
+     * @param parameter The command parameters in the format "tableName columnName columnType".
+     */
     @Override
     public void execute(String parameter) {
         String[] params = parameter.split("\\s+");
@@ -38,6 +48,9 @@ public class AddColumnCommand implements Command {
         }
     }
 
+    /**
+     * Adds a new column to the specified table.
+     */
     private void addColumn() {
         Table table = database.getTableByName(tableName);
         if (table != null) {
@@ -61,6 +74,11 @@ public class AddColumnCommand implements Command {
         }
     }
 
+    /**
+     * Updates the associated text file to reflect the new table structure.
+     *
+     * @param table The table to update in the text file.
+     */
     private void updateTextFile(Table table) {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("TableName: " + table.getName() + "\n");
@@ -83,10 +101,20 @@ public class AddColumnCommand implements Command {
         }
     }
 
+    /**
+     * Sets the name of the table.
+     *
+     * @param tableName The name of the table.
+     */
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
+    /**
+     * Sets the name of the text file to update.
+     *
+     * @param fileName The name of the text file.
+     */
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

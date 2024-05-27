@@ -6,7 +6,13 @@ import project.OOP2.f22621615.enums.CommandEnum;
 
 import java.util.Scanner;
 
+/**
+ * The main class to start the application.
+ */
 public class Main {
+    /**
+     * The entry point of the application.
+     */
     public static void main(String[] args) {
         System.setProperty("user.dir", "D:\\oop1proekt\\proekt122621615\\");
 

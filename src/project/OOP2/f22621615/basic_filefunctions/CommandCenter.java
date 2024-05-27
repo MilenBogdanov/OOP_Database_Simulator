@@ -8,6 +8,9 @@ import project.OOP2.f22621615.interfaces.Command;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Central hub for executing various commands in the application.
+ */
 public class CommandCenter {
     private OpenFileCommand openFileCommand;
     private Map<CommandEnum, Command> commands;
@@ -16,6 +19,11 @@ public class CommandCenter {
     private String fileName;
     private String lastLoadedFile;
 
+    /**
+     * Constructs a CommandCenter with the specified database.
+     *
+     * @param database The database instance to operate on.
+     */
     public CommandCenter(Database database) {
         this.database = database;
         this.fileContent = new StringBuilder();
@@ -24,6 +32,9 @@ public class CommandCenter {
         initializeCommands();
     }
 
+    /**
+     * Initializes all the available commands and maps them to their respective enums.
+     */
     private void initializeCommands() {
         commands = new HashMap<>();
 
@@ -48,6 +59,12 @@ public class CommandCenter {
         commands.put(CommandEnum.AGGREGATE, new AggregateCommand(database));
     }
 
+    /**
+     * Executes the specified command with the given parameter.
+     *
+     * @param commandName The name of the command to execute.
+     * @param parameter   The parameter associated with the command.
+     */
     public void executeCommand(CommandEnum commandName, String parameter) {
         Command command = commands.get(commandName);
         if (command != null) {

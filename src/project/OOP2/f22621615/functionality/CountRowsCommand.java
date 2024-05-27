@@ -66,6 +66,9 @@ public class CountRowsCommand implements Command {
         }
     }
 
+    /**
+     * Performs the count of rows based on the specified search criteria.
+     */
     private void performCount() {
         Table table = database.getTableByName(tableName);
         if (table != null) {
@@ -76,6 +79,12 @@ public class CountRowsCommand implements Command {
         }
     }
 
+    /**
+     * Counts the number of rows in the specified table where the column contains the search value.
+     *
+     * @param table The table to count rows in.
+     * @return The number of rows matching the search criteria.
+     */
     private int countRows(Table table) {
         int count = 0;
         for (Row row : table.getRows()) {
@@ -86,6 +95,14 @@ public class CountRowsCommand implements Command {
         return count;
     }
 
+    /**
+     * Checks if the specified row contains the search value in the specified column.
+     *
+     * @param row The row to check.
+     * @param columnName The name of the column to search in.
+     * @param value The value to search for.
+     * @return True if the row contains the search value in the specified column, false otherwise.
+     */
     private boolean rowContainsValue(Row row, String columnName, String value) {
         Object columnValue = row.getValue(columnName);
         return columnValue != null && columnValue.toString().contains(value);

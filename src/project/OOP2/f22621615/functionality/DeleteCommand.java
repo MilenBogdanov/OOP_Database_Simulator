@@ -72,6 +72,9 @@ public class DeleteCommand implements Command {
         }
     }
 
+    /**
+     * Performs the deletion of rows from the specified table where the column value matches the search value.
+     */
     private void performDelete() {
         Table table = database.getTableByName(tableName);
         if (table != null) {
@@ -98,6 +101,11 @@ public class DeleteCommand implements Command {
         }
     }
 
+    /**
+     * Updates the associated text file with the current state of the table.
+     *
+     * @param table The table whose state is to be written to the file.
+     */
     private void updateFile(Table table) {
         String fileName = table.getAssociatedTextFile();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {

@@ -4,21 +4,21 @@ column: id INTEGER
 column: first_name STRING
 column: last_name STRING
 column: salary FLOAT
-column: positions STRING
-column: test STRING
+column: positions INTEGER
+column: test NULL
 Rows:
-1 John Doe 50000.00 null null
-1 John Doe 70000.00 null null
-2 Jane Smith 69000.0 null null
-3 Michael Johnson 100000.00 null null
-4 Emily Davis 55000.00 null null
-5 Robert Wilson 62000.00 null null
-6 Susan Brown 58000.00 null null
-7 David Martinez 72000.00 null null
-8 Lisa Taylor 67000.00 null null
-9 Steven Anderson 63000.00 null null
-10 Karen Hernandez 99000.0 null null
-11 Matthew Thomas 64000.00 null null
-13 Milen Bogdanov 85000.0 null null
-14 Nurdzhan Mehmedova 79000.00 null null
-15 Ivan Ivanov 12000.00 null null 
+1 John Anderson 50000.00 1 null
+2 John Doe 70000.00 2 null
+3 Jane Smith 69000.0 3 null
+4 Michael Johnson 100000.00 1 null
+5 Emily Davis 55000.00 2 null
+6 Robert Wilson 62000.00 3 null
+7 Susan Brown 58000.00 3 null
+8 David Martinez 72000.00 1 null
+9 Lisa Taylor 67000.00 2 null
+10 Steven Anderson 63000.00 3 null
+11 Karen Hernandez 99000.0 1 null
+12 Matthew Thomas 64000.00 2 null
+13 Milen Bogdanov 85000.0 4 null
+14 Nurdzhan Mehmedova 80000.0 4 null
+15 Ivan Ivanov 99999.00 5 null 

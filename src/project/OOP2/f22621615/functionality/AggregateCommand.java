@@ -78,6 +78,8 @@ public class AggregateCommand implements Command {
     /**
      * Executes the command to perform the aggregate operation.
      * Options: sum, product, maximum, minimum.
+     *
+     * @param parameter The command parameters in the format "tableName searchColumnName searchValue targetColumnName operation".
      */
     @Override
     public void execute(String parameter) {
@@ -94,6 +96,9 @@ public class AggregateCommand implements Command {
         }
     }
 
+    /**
+     * Performs the aggregate operation based on the specified parameters.
+     */
     private void performAggregate() {
         Table table = database.getTableByName(tableName);
         if (table == null) {
@@ -157,6 +162,12 @@ public class AggregateCommand implements Command {
         }
     }
 
+    /**
+     * Checks if the specified data type is numeric (INTEGER or FLOAT).
+     *
+     * @param dataType The data type to check.
+     * @return True if the data type is numeric, false otherwise.
+     */
     private boolean isNumericType(DataType dataType) {
         return dataType == DataType.INTEGER || dataType == DataType.FLOAT;
     }
