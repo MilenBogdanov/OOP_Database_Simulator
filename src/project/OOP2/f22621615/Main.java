@@ -15,5 +15,3 @@ public class Main {
         app.run();
     }
 }
-//otdelen class za main logikata i dokumentaciqta
-//innerjoin

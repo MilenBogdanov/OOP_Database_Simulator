@@ -44,7 +44,7 @@ public class LoadTableFromTextFileCommand implements Command {
      */
     @Override
     public void execute(String parameter) {
-        this.fileName = parameter; // Set the file name from the parameter
+        this.fileName = parameter;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             String tableName = null;

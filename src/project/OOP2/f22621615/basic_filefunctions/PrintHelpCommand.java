@@ -34,6 +34,7 @@ public class PrintHelpCommand implements Command {
         System.out.println("| rename        | Renames a table.                                                          |");//11
         System.out.println("| count         | Finds the number of rows in the table which columns contain value         |");//12
         System.out.println("| aggregate     | Performs a given operation: sum, product, maximum, minimum.               |");//13
+        System.out.println("| innerjoin     | Performs a given operation: sum, product, maximum, minimum.               |");//14
         System.out.println("| close         | Closes currently opened file.                                             |");
         System.out.println("| save          | Saves the currently open file.                                            |");
         System.out.println("| saveas <file> | Saves the currently open file in <file>.                                  |");

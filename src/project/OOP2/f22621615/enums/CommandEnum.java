@@ -22,5 +22,6 @@ public enum CommandEnum {
     INSERT,
     RENAME,
     COUNT,
-    AGGREGATE
+    AGGREGATE,
+    INNERJOIN
 }

@@ -121,6 +121,16 @@ public class Table {
     }
 
     /**
+     * Retrieves a column by its name. This method is the same as getColumn but added for compatibility.
+     *
+     * @param columnName the name of the column to retrieve
+     * @return the column with the specified name, or {@code null} if not found
+     */
+    public Column getColumnByName(String columnName) {
+        return getColumn(columnName);
+    }
+
+    /**
      * Sets the name of the table.
      *
      * @param name the new name of the table

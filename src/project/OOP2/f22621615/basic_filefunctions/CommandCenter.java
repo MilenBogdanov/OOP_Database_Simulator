@@ -57,6 +57,7 @@ public class CommandCenter {
         commands.put(CommandEnum.RENAME, new RenameTableCommand(database));
         commands.put(CommandEnum.COUNT, new CountRowsCommand(database));
         commands.put(CommandEnum.AGGREGATE, new AggregateCommand(database));
+        commands.put(CommandEnum.INNERJOIN, new InnerJoinCommand(database));
     }
 
     /**

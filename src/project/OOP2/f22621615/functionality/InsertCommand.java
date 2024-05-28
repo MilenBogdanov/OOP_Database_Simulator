@@ -38,7 +38,7 @@ public class InsertCommand implements Command {
             String tableName = params[0];
             Table table = database.getTableByName(tableName);
             if (table != null) {
-                values = Arrays.copyOfRange(params, 1, params.length); // Initialize the values array here
+                values = Arrays.copyOfRange(params, 1, params.length);
                 if (values.length == table.getColumns().size()) {
                     Row newRow = new Row();
                     for (int i = 0; i < values.length; i++) {
