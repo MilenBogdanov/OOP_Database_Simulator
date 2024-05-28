@@ -1,0 +1,9 @@
+TableName: Test1
+Columns:
+column: student_id INTEGER
+column: department STRING
+Rows:
+1 Maths
+2 Science
+12 PE
+6 History

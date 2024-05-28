@@ -1,0 +1,11 @@
+TableName: Test2
+Columns:
+column: student_id INTEGER
+column: first_name STRING
+Rows:
+1 Ivan
+2 Milen
+3 Mariqn
+4 Nurdzhan
+5 Stilian
+6 Simona
